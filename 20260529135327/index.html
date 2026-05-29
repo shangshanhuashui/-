@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FFmpeg 音频特效工坊 · 21 种声学效果</title>
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🎚️</div>
+      <div>
+        <h1>FFmpeg 音频特效工坊</h1>
+        <p class="subtitle">基于 FFmpeg.wasm + Web Audio API · 五大类 21 种声学效果</p>
+      </div>
+    </div>
+    <div class="status" id="status">就绪</div>
+  </header>
+
+  <main class="layout">
+    <!-- 左：上传/原始音频 -->
+    <section class="panel">
+      <h2><span class="step">1</span> 上传音频</h2>
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept="audio/wav,video/mp4,.wav,.mp4" hidden />
+        <div class="dz-inner">
+          <div class="dz-icon">⬆️</div>
+          <div class="dz-title">点击或拖拽文件到此处</div>
+          <div class="dz-hint">支持 .mp4 / .wav · 单文件最大 ~200MB</div>
+        </div>
+      </div>
+      <div class="file-info" id="fileInfo" hidden>
+        <div><b>文件：</b><span id="fileName">-</span></div>
+        <div><b>大小：</b><span id="fileSize">-</span></div>
+        <div><b>采样率：</b><span id="fileSR">-</span> Hz</div>
+        <div><b>声道：</b><span id="fileCh">-</span></div>
+        <div><b>时长：</b><span id="fileDur">-</span></div>
+      </div>
+
+      <h3 class="mini-title">原始音频</h3>
+      <audio id="srcAudio" controls></audio>
+    </section>
+
+    <!-- 中：效果选择 -->
+    <section class="panel effects">
+      <h2><span class="step">2</span> 选择声学效果</h2>
+
+      <div class="cat">
+        <div class="cat-title">🏛️ 空间混响 <span class="cat-desc">基于真实房间脉冲响应（RT60）</span></div>
+        <div class="grid"></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-title">📞 通讯效果 <span class="cat-desc">基于电话/电台/老唱片频响曲线</span></div>
+        <div class="grid"></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-title">🌊 环境模拟 <span class="cat-desc">基于介质衰减与遮挡传递函数</span></div>
+        <div class="grid"></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-title">💭 叙事效果 <span class="cat-desc">影视音效设计常用配置</span></div>
+        <div class="grid"></div>
+      </div>
+
+      <div class="cat">
+        <div class="cat-title">🎧 立体声 / 空间 <span class="cat-desc">基于 ITD/ILD/HRTF 的空间渲染</span></div>
+        <div class="grid"></div>
+      </div>
+
+      <h3 class="mini-title">参数微调（高级）</h3>
+      <div class="advanced">
+        <label>混响湿度 <input type="range" id="wet" min="0" max="100" value="50" /><span class="val" id="wetVal">50%</span></label>
+        <label>主增益（dB） <input type="range" id="gain" min="-12" max="12" value="0" step="0.5" /><span class="val" id="gainVal">0 dB</span></label>
+        <label>低切（Hz） <input type="range" id="hpf" min="0" max="500" value="0" step="10" /><span class="val" id="hpfVal">关</span></label>
+        <label>高切（Hz） <input type="range" id="lpf" min="2000" max="20000" value="20000" step="100" /><span class="val" id="lpfVal">关</span></label>
+      </div>
+
+      <div class="actions">
+        <button id="btnPreview" class="btn primary" disabled>▶ 实时试听</button>
+        <button id="btnStop" class="btn">■ 停止</button>
+        <button id="btnRender" class="btn success" disabled>⚙️ 渲染并导出 WAV</button>
+      </div>
+    </section>
+
+    <!-- 右：处理后输出 -->
+    <section class="panel">
+      <h2><span class="step">3</span> 处理结果</h2>
+      <div class="current-effect" id="currentEffect">未选择效果</div>
+      <div class="effect-meta" id="effectMeta">点击中间区域的效果卡片，将显示其声学参数。</div>
+
+      <h3 class="mini-title">输出音频</h3>
+      <audio id="outAudio" controls></audio>
+
+      <a id="downloadLink" class="btn download" hidden>⬇️ 下载 WAV 文件</a>
+
+      <div class="log" id="log"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    参考：FFmpeg afir / aecho / firequalizer / stereotools；ISO 3382 房间声学；ITU-T G.712 电话频响；MIT KEMAR HRTF 数据集
+  </footer>
+
+  <script src="./effects.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
