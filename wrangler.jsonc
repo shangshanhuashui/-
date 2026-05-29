@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "yinpinchuliceshi",
+  "compatibility_date": "2026-05-29",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "20260529135327"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
